@@ -1,10 +1,3 @@
-"""layanan.py - LayananPengaduan: hanya mengoordinasi alur pengaduan (SRP).
-
-Aturan prioritas ada di kategori.py, aturan alur status di pengaduan.py,
-pencatatan penugasan di tugas.py. Class ini tidak menulis aturan-aturan itu.
-Semua method menerima objek Pengaduan ATAU id_pengaduan (str), supaya cocok
-dengan main.py (objek) dan pengguna.py (id).
-"""
 from pengaduan import Pengaduan, DIVERIFIKASI, DITOLAK, DITUGASKAN
 from pengguna import Pelapor
 from tugas import TugasPemeliharaan
@@ -17,7 +10,7 @@ class LayananPengaduan:
         self.daftar_notifikasi = list(daftar_notifikasi or [])
         self.daftar_tugas = []
 
-    # ---------- registrasi ----------
+    # registrasi 
     def tambah_fasilitas(self, fasilitas):
         if any(f.id_fasilitas == fasilitas.id_fasilitas for f in self.daftar_fasilitas):
             raise ValueError(f"Fasilitas {fasilitas.id_fasilitas} sudah terdaftar.")
@@ -27,7 +20,7 @@ class LayananPengaduan:
         """Kanal baru cukup didaftarkan di sini (OCP)."""
         self.daftar_notifikasi.append(notifikasi)
 
-    # ---------- alur utama ----------
+    # alur utama 
     def buat_pengaduan(self, pelapor, fasilitas, kategori, deskripsi):
         """F03: status awal Diajukan; prioritas dari kategori."""
         if not isinstance(pelapor, Pelapor):
@@ -93,11 +86,11 @@ class LayananPengaduan:
                          f"Catatan: {tugas.catatan}")
         return tugas
 
-    # ---------- pemantauan (F08) ----------
+    # pemantauan (F08)
     def pengaduan_milik(self, pelapor):
         return [p for p in self.daftar_pengaduan if p.pelapor is pelapor]
 
-    # ---------- helper internal ----------
+    # helper internal 
     def _notifikasi(self, pengaduan, pesan):
         """F09: kirim ke semua kanal tanpa tahu jenis kanalnya (polimorfisme)."""
         for kanal in self.daftar_notifikasi:
